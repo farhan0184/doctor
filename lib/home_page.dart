@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctor/nav_bar.dart';
 import 'package:doctor/second_page.dart';
 import 'package:flutter/material.dart';
@@ -37,33 +36,24 @@ class _HomePageState extends State<HomePage> {
     );
 
   Widget buildGrid() => 
-    StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('doctors').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return GridView.builder(
+    GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8
           ),
-          itemCount: snapshot.data!.docs.length, 
+          itemCount: items.length, 
           itemBuilder: (BuildContext context, int index) {
-            var servicesInfo =
-                snapshot.data!.docs[index].data() as Map<String, dynamic>;
-            String img = servicesInfo['img'];
             
-            final String item = servicesInfo['name'];
+            String item = items[index];
+            
+            
             
             return GridTile(
               child: InkWell(
                 child: Ink.image(
-                  image: NetworkImage(
-                    img
+                  image: AssetImage(
+                    'assets/images/${item}.jpeg'
                   ),
                   fit: BoxFit.cover
                 ),
@@ -78,8 +68,8 @@ class _HomePageState extends State<HomePage> {
             );
           }
   );
-      }
-    );
+      
+    
   
   
   
